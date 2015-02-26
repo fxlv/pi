@@ -10,6 +10,7 @@ import sys
 import os
 import subprocess
 infofile_name = "/tmp/temperature.info"
+home = os.environ['HOME']
 
 DEBUG = True
 
@@ -44,11 +45,26 @@ else:
 # getting dht info can fail so we use simple retry mechanism
 dht_success = False
 
+
+def find_adafruit_dht():
+    search_path = [home, '.', '/opt']
+    for path in search_path:
+        path = "{0}/Adafruit_DHT".format(path)
+        if DEBUG:
+            print "Checking for {0}".format(path)
+        if os.path.exists(path):
+            if DEBUG:
+                print "Found {0}".format(path)
+                return path
+    else:
+        return False
+# DHT can fail to return temperature, so retry if need be
 while not dht_success:
-    if not os.path.exists("./Adafruit_DHT"):
-        print "./Adafruit_DHT binary is missing"
+    adafruit_dht = find_adafruit_dht()
+    if not adafruit_dht:
+        print "Adafruit_DHT binary is missing"
         sys.exit(1)
-    output = subprocess.check_output(["./Adafruit_DHT", "22", "4"])
+    output = subprocess.check_output([adafruit_dht, "22", "4"])
     output = output.splitlines()
 
     if len(output) == 3:
