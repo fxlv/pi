@@ -18,6 +18,11 @@ temperature_dht22 = False
 temperature_dallas = False
 humidity_dht22 = False
 
+# DHT needs /dev/mem access
+if os.geteuid() != 0:
+    print "You need to be root in order to use DHT temperature sensor."
+    print "Please run as root."
+    sys.exit(1)
 
 onewire_list = glob.glob("/sys/bus/w1/devices/28*")
 if len(onewire_list) == 1:
