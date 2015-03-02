@@ -9,6 +9,7 @@ import glob
 import sys
 import os
 import subprocess
+from azurepy import queues
 infofile_name = "/tmp/temperature.info"
 home = os.environ['HOME']
 
@@ -98,6 +99,11 @@ def main():
         infofile.write("humidity_dht22={}\n".format(humidity_dht22))
         infofile.write("temperature_dht22={}\n".format(temperature_dht22))
         infofile.write("temperature_dallas={}\n".format(temperature_dallas))
+    # put temperature and humidity in azure queues
+    int_temperature_queue = queues.Queue("wipi-int-temperature")
+    int_humidity_queue = queues.Queue("wipi-int-humidity")
+    int_temperature_queue.put(temperature_dht22)
+    int_humidity_queue.put(humidity_dht22)
 
 if __name__ == '__main__':
     main()
