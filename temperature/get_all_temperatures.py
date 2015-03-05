@@ -7,11 +7,12 @@ from azurepy import queues
 
 
 forecastio_queue = queues.Queue("forecastio-temperature")
+ilmerree_queue = queues.Queue("ilmerree-temperature")
 int_temperature_queue = queues.Queue("wipi-int-temperature")
 int_humidity_queue = queues.Queue("wipi-int-humidity")
 
 
-all_queues = [forecastio_queue, int_temperature_queue, int_humidity_queue]
+all_queues = [forecastio_queue, int_temperature_queue, int_humidity_queue, ilmerree_queue]
 
 def length():
     print "Lengths of all queues"
