@@ -1,0 +1,6 @@
+<h2>These are the temperatures</h2>
+{% for temperature in temperatures %}
+<p>Name: {{temperature.name}} Temp: {{temperature.temperature}} Time: {{temperature.insertion_time}}
+{% endfor %}
+<h2>
+<p>Humidity inside is {{humidity.message_text}}</p>
