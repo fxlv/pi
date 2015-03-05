@@ -10,8 +10,11 @@ def get_html():
 
 def get_temperature():
     soup = BeautifulSoup(get_html(), "lxml")
-    temperature = soup.find("div","ilm_tana_parem").string.strip()
+    try:
+        temperature = soup.find("div","ilm_tana_parem").string.strip()
+        temperature = float(temperature.split()[0])
+    except AttributeError:
+        temperature = 777 
     # split off the celsius symbol and make it a float instead of string
-    temperature = float(temperature.split()[0])
     return temperature
 
