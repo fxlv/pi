@@ -5,6 +5,7 @@
 
 import forecastio
 import account
+import ilmerree
 from azurepy import queues
 
 # Tallinn, Kesklinn
@@ -16,5 +17,10 @@ forecast = forecastio.load_forecast(key, lat, lng)
 current_data = forecast.currently()
 forecastio_temperature = current_data.d['temperature']
 forecastio_queue = queues.Queue("forecastio-temperature")
+
+ilmerree_temperature = ilmerree.get_temperature()
+ilmerree_queue = queues.Queue("ilmerree-temperature")
+
 ttl = 300 # 5 mins
 forecastio_queue.put(forecastio_temperature, ttl)
+ilmerree_queue.put(ilmerree_temperature, ttl)
