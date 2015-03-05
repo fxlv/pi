@@ -23,18 +23,32 @@ def pop_last():
     for queue in all_queues:
         print "Queue: {0}".format(queue)
         message = queue.get_message()
+        if not message:
+            print "Could not get anything from", queue
+            continue
         print message.message_text
         print message.insertion_time
         print message.expiration_time
         queue.delete_message(message)
 
+def peek_last():
+    for queue in all_queues:
+        print "Queue: {0}".format(queue)
+        message = queue.peek_message()
+        if not message:
+            print "Could not get anything from", queue
+            continue
+        print message.message_text
+        print message.insertion_time
+        print message.expiration_time
+
 def clear():
     forecastio_queue.clear()
     int_temperature_queue.clear()
     int_humidity_queue.clear()
+    ilmerree_queue.clear()
 
 
 if __name__ == "__main__":
     length()
-    pop_last()
-
+    peek_last()
