@@ -15,6 +15,9 @@ def get_temperature():
         temperature = float(temperature.split()[0])
     except AttributeError:
         temperature = 777 
+    except ValueError:
+        temperature = 888
+        
     # split off the celsius symbol and make it a float instead of string
     return temperature
 
