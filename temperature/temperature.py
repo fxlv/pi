@@ -10,6 +10,7 @@ import sys
 import os
 import subprocess
 from azurepy import queues
+from storage import tempdb
 infofile_name = "/tmp/temperature.info"
 home = os.environ['HOME']
 
@@ -105,6 +106,9 @@ def main():
     int_humidity_queue = queues.Queue("wipi-int-humidity")
     int_temperature_queue.put(temperature_dht22, ttl)
     int_humidity_queue.put(humidity_dht22, ttl)
+
+    tempdb.add_reading("wipi-int", temperature_dht22)
+    tempdb.add_reading("wipi-int-humidity", humidity_dht22)
 
 if __name__ == '__main__':
     main()
