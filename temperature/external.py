@@ -27,5 +27,6 @@ forecastio_queue.put(forecastio_temperature, ttl)
 ilmerree_queue.put(ilmerree_temperature, ttl)
 
 
-tempdb.add_reading("forecastio_temperature", forecastio_temperature)
-tempdb.add_reading("ilmerree_temperature", ilmerree_temperature)
+t = tempdb.Tempdb()
+t.add_reading("forecastio_temperature", forecastio_temperature)
+t.add_reading("ilmerree_temperature", ilmerree_temperature)

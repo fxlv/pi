@@ -106,9 +106,9 @@ def main():
     int_humidity_queue = queues.Queue("wipi-int-humidity")
     int_temperature_queue.put(temperature_dht22, ttl)
     int_humidity_queue.put(humidity_dht22, ttl)
-
-    tempdb.add_reading("wipi-int", temperature_dht22)
-    tempdb.add_reading("wipi-int-humidity", humidity_dht22)
+    t = tempdb.Tempdb()
+    t.add_reading("wipi-int", temperature_dht22)
+    t.add_reading("wipi-int-humidity", humidity_dht22)
 
 if __name__ == '__main__':
     main()
