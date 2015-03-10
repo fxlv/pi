@@ -2,15 +2,36 @@ import sqlite3
 import datetime
 import os
 
+CREATE_SQL_FILE = "create.sql"
 
 class Tempdb:
-    def __init__(self):
-        self.db_search_path = [
-            "github/pi/temperature/temperature.db",
-            "pi/temperature/temperature.db",
-            "temperature.db"]
-        self.db_path = self.find_db_path()
+
+    def __init__(self, path=None):
+        if not path:
+            self.db_search_path = [
+                "github/pi/temperature/temperature.db",
+                "pi/temperature/temperature.db",
+                "temperature.db"]
+            self.db_path = self.find_db_path()
+        else:
+            if not os.path.exists(path):
+                self.create(path)
+            self.db_path = path
         self.conn, self.cursor = self.connect()
+    
+    def create(self, path):
+        "Create database and tables for Sqlite"
+        if not os.path.exists(CREATE_SQL_FILE):
+            return False
+        with open(CREATE_SQL_FILE) as create_sql_file:
+            create_sql = ""
+            for line in create_sql_file.readlines():
+                create_sql += line.strip()
+            self.conn, self.cursor = self.connect(path)
+            self.cursor.execute(create_sql)
+            self.conn.commit()
+
+
 
     def __del__(self):
         self.conn.close()
@@ -21,8 +42,10 @@ class Tempdb:
                 db_path = "{0}/{1}".format(os.getcwd(), path)
                 return db_path
 
-    def connect(self):
-        conn = sqlite3.connect(self.db_path)
+    def connect(self, db_path=None):
+        if not db_path:
+            db_path = self.db_path
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         return conn, cursor
 
