@@ -8,13 +8,26 @@ import account
 import ilmerree
 from storage import tempdb
 from azurepy import queues
+import time
 
 # Tallinn, Kesklinn
 lat, lng = 59.41494, 24.74032
 # my forecast.io key, kept in a separate file
 key = account.forecast_io_key
 
-forecast = forecastio.load_forecast(key, lat, lng)
+
+while True:
+    retry_count = 0
+    try:
+        if retry_count > 0:
+            sleep_time = ( retry_count * 2 ) + 5
+            time.sleep(sleep_time)
+        forecast = forecastio.load_forecast(key, lat, lng)
+        break
+    except:
+        print "Failed to get data from forecast.io, will retry"
+        retry_count += 1
+
 current_data = forecast.currently()
 forecastio_temperature = current_data.d['temperature']
 forecastio_queue = queues.Queue("forecastio-temperature")
