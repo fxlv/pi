@@ -18,7 +18,7 @@ class Tempdb:
                 self.create(path)
             self.db_path = path
         self.conn, self.cursor = self.connect()
-    
+
     def create(self, path):
         "Create database and tables for Sqlite"
         if not os.path.exists(CREATE_SQL_FILE):
@@ -30,8 +30,6 @@ class Tempdb:
             self.conn, self.cursor = self.connect(path)
             self.cursor.execute(create_sql)
             self.conn.commit()
-
-
 
     def __del__(self):
         self.conn.close()
@@ -69,7 +67,7 @@ class Tempdb:
         sql_vars = (source_name,)
         self.cursor.execute(sql, sql_vars)
         return self.cursor.fetchall()
-    
+
     def get_last_reading(self, source_name):
         sql = """select * from temperature
             where source_name=? order by insert_time desc limit 1"""
