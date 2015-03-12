@@ -2,53 +2,20 @@
 #
 # for testing and development purposes only
 #
-from azurepy import queues
+from storage import tempdb
 
+t = tempdb.Tempdb()
 
+def print_sources():
+    print "Available sources:"
+    for source in t.get_source_names():
+        print " > ",source
 
-forecastio_queue = queues.Queue("forecastio-temperature")
-ilmerree_queue = queues.Queue("ilmerree-temperature")
-int_temperature_queue = queues.Queue("wipi-int-temperature")
-int_humidity_queue = queues.Queue("wipi-int-humidity")
-
-
-all_queues = [forecastio_queue, int_temperature_queue, int_humidity_queue, ilmerree_queue]
-
-def length():
-    print "Lengths of all queues"
-    for q in all_queues:
-        print q,q.length()
-
-def pop_last():
-    for queue in all_queues:
-        print "Queue: {0}".format(queue)
-        message = queue.get_message()
-        if not message:
-            print "Could not get anything from", queue
-            continue
-        print message.message_text
-        print message.insertion_time
-        print message.expiration_time
-        queue.delete_message(message)
-
-def peek_last():
-    for queue in all_queues:
-        print "Queue: {0}".format(queue)
-        message = queue.peek_message()
-        if not message:
-            print "Could not get anything from", queue
-            continue
-        print message.message_text
-        print message.insertion_time
-        print message.expiration_time
-
-def clear():
-    forecastio_queue.clear()
-    int_temperature_queue.clear()
-    int_humidity_queue.clear()
-    ilmerree_queue.clear()
-
+def get_last_reading():
+    print "Last readings:"
+    for source in t.get_source_names():
+        print " > ",t.get_last_reading(source)
 
 if __name__ == "__main__":
-    length()
-    peek_last()
+    print_sources()
+    get_last_reading()
