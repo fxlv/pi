@@ -30,6 +30,7 @@ class Tempdb:
             self.conn, self.cursor = self.connect(path)
             self.cursor.execute(create_sql)
             self.conn.commit()
+            self.conn.close()
 
     def __del__(self):
         self.conn.close()
