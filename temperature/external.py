@@ -7,7 +7,6 @@ import forecastio
 import account
 import ilmerree
 from storage import tempdb
-from azurepy import queues
 import time
 
 # Tallinn, Kesklinn
@@ -20,7 +19,7 @@ while True:
     retry_count = 0
     try:
         if retry_count > 0:
-            sleep_time = ( retry_count * 2 ) + 5
+            sleep_time = (retry_count * 2) + 5
             time.sleep(sleep_time)
         forecast = forecastio.load_forecast(key, lat, lng)
         break
@@ -30,15 +29,8 @@ while True:
 
 current_data = forecast.currently()
 forecastio_temperature = current_data.d['temperature']
-forecastio_queue = queues.Queue("forecastio-temperature")
 
 ilmerree_temperature = ilmerree.get_temperature()
-ilmerree_queue = queues.Queue("ilmerree-temperature")
-
-ttl = 300 # 5 mins
-forecastio_queue.put(forecastio_temperature, ttl)
-ilmerree_queue.put(ilmerree_temperature, ttl)
-
 
 t = tempdb.Tempdb()
 t.add_reading("forecastio_temperature", forecastio_temperature)
