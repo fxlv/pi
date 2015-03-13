@@ -48,10 +48,10 @@ class Tempdb:
         cursor = conn.cursor()
         return conn, cursor
 
-    def add_reading(self, source_name, temperature_reading):
+    def add_reading(self, source_name, temperature_reading, success=True):
         now = datetime.datetime.now()
         sql = """insert into temperature values (NULL,?,?,?,?)"""
-        sql_vars = (source_name, temperature_reading, now, True)
+        sql_vars = (source_name, temperature_reading, now, success)
         self.cursor.execute(sql, sql_vars)
         self.conn.commit()
 
