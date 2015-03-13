@@ -94,18 +94,12 @@ def main():
     if DEBUG:
         debugprint(humidity_dht22)
         debugprint(temperature_dht22)
-        debugprint(temperature_dallas)
 
     with open(infofile_name, "w") as infofile:
         infofile.write("humidity_dht22={}\n".format(humidity_dht22))
         infofile.write("temperature_dht22={}\n".format(temperature_dht22))
         infofile.write("temperature_dallas={}\n".format(temperature_dallas))
-    # put temperature and humidity in azure queues
-    ttl = 60 * 5
-    int_temperature_queue = queues.Queue("wipi-int-temperature")
-    int_humidity_queue = queues.Queue("wipi-int-humidity")
-    int_temperature_queue.put(temperature_dht22, ttl)
-    int_humidity_queue.put(humidity_dht22, ttl)
+
     t = tempdb.Tempdb()
     t.add_reading("wipi-int", temperature_dht22)
     t.add_reading("wipi-int-humidity", humidity_dht22)
