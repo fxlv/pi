@@ -30,18 +30,21 @@ def test_get_source_names():
     assert len(source_names) == 1
     assert source_names[0] == test_source_name
 
+def test_get_reading_count():
+    assert t.get_reading_count(test_source_name) == 2
+
 def test_get_all_readings():
     readings = t.get_all_readings(test_source_name)
     assert len(readings) == 2
     # second column of the first row contains source name
-    assert readings[0][1] == test_source_name
+    assert readings[0]['source_name'] == test_source_name
 
 def test_get_last_reading():
     last_reading = t.get_last_reading(test_source_name)
     # should contain 5 columns/fields
-    assert len(last_reading) == 5
-    assert isinstance(last_reading, tuple)
-    assert last_reading[1] == test_source_name
+    assert len(last_reading) == 4 
+    assert isinstance(last_reading, dict)
+    assert last_reading['source_name'] == test_source_name
 
 def test_cleanup():
     os.unlink(test_db_name)

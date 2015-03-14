@@ -67,11 +67,31 @@ class Tempdb:
         sql = "select * from temperature where source_name=?"
         sql_vars = (source_name,)
         self.cursor.execute(sql, sql_vars)
-        return self.cursor.fetchall()
+        result = []
+        for row in self.cursor.fetchall():
+            result.append(self.row_to_dict(row))
+        return result
+
+    def get_reading_count(self, source_name):
+        sql = "select count(*) from temperature where source_name=?"
+        sql_vars = (source_name,)
+        self.cursor.execute(sql, sql_vars)
+        return self.cursor.fetchone()[0]
+
+    def row_to_dict(self, row):
+        "Convert SQL table row into a dictionary"
+        result_dict = {}
+        result_dict['source_name'] = row[1]
+        result_dict['temperature'] = row[2]
+        result_dict['date'] = row[3]
+        result_dict['success'] = row[4]
+        return result_dict
 
     def get_last_reading(self, source_name):
         sql = """select * from temperature
             where source_name=? order by insert_time desc limit 1"""
         sql_vars = (source_name,)
         self.cursor.execute(sql, sql_vars)
-        return self.cursor.fetchone()
+        last_reading = self.cursor.fetchone()
+        last_reading = self.row_to_dict(last_reading)
+        return last_reading
