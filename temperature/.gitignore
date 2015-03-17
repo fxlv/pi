@@ -1,3 +1,4 @@
 account.py
 *.pyc
 temperature.db
+temperature.backup.db
