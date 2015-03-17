@@ -61,6 +61,8 @@ def main():
         print "Exiting..."
 
 def write_screen(msg, display_time=5):
+    lcd_init()
+    backlight()
     """
     Display up to four line message on the screen
     msg - a list or a string, lines can be delimited with newline
