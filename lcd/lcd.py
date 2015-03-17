@@ -53,17 +53,53 @@ def clear_screen():
     send_cmd(0x01)
 
 
-def test():
+def main():
     try:
         run_test()
     except KeyboardInterrupt:
         clear_screen()
         print "Exiting..."
 
+def write_screen(msg, display_time=5):
+    """
+    Display up to four line message on the screen
+    msg - a list or a string, lines can be delimited with newline
+    Line can be 20 chars long and there can be 4 lines or less.
+    """
+    empty_line = " "*20
+    clear_screen()
+    if isinstance(msg, str):
+        msg = msg.splitlines()
+    if not isinstance(msg, list):
+        debugprint("write_screen() accepts only lists")
+        lcd_write_line(empty_line, 1)
+        lcd_write_line("Invalid message!", 2)
+        lcd_write_line(empty_line, 3)
+        lcd_write_line(empty_line, 4)
+    else:
+        if len(msg) > 4:
+            debugprint("Message list too long")
+            sys.exit(1)
+        elif len(msg) == 0:
+            debugprint("Message list empty")
+            sys.exit(1)
+        elif len(msg) != 4:
+            # pad with empty lines if needed
+            while len(msg) != 4:
+                msg.append(empty_line)
+        for line in msg:
+            # truncate long lines
+            if len(line) > 20:
+                display_line = line[:17]+"..."
+            else:
+                display_line = line
+            lcd_write_line(display_line, msg.index(line)+1)
+        time.sleep(display_time)
 
 def run_test():
     lcd_init()
     backlight()
+    write_screen("kaka")
     while True:
         debugprint("test started")
         lcd_write_line("Hello", 1)
@@ -190,4 +226,4 @@ def enable_command():
 
 
 if __name__ == '__main__':
-    test()
+    main()
