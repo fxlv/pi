@@ -44,7 +44,7 @@ class Tempdb:
     def connect(self, db_path=None):
         if not db_path:
             db_path = self.db_path
-        conn = sqlite3.connect(db_path)
+        conn = sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES)
         cursor = conn.cursor()
         return conn, cursor
 
