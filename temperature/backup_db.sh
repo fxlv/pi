@@ -5,3 +5,4 @@
 # to your crontab
 #
 sqlite3 temperature.db ".backup temperature.backup.db"
+cp temperature.backup.db /home/temperature/temperature.db
