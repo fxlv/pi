@@ -63,8 +63,11 @@ class Tempdb:
             source_names.append(row[0])
         return source_names
 
-    def get_all_readings(self, source_name):
+    def get_all_readings(self, source_name, limit=None):
         sql = "select * from temperature where source_name=?"
+        if limit:
+            assert isinstance(limit, int)
+            sql += " order by insert_time desc limit {0}".format(limit)
         sql_vars = (source_name,)
         self.cursor.execute(sql, sql_vars)
         result = []
