@@ -33,12 +33,9 @@ def show_last_reading():
         if time_delta.seconds > 400:
             msg.append("Old data for")
             msg.append("  {0}".format(last_reading['source_name']))
-        else:
-            msg.append("Source: ")
-            msg.append("  {0}".format(last_reading['source_name']))
-        msg.append("Temperature: {0}".format(last_reading['temperature']))
-        msg.append("Time delta: {0}".format(time_delta.seconds))
-        lcd.write_screen(msg, 5)
+            msg.append("Temperature: {0}".format(last_reading['temperature']))
+            msg.append("Time delta: {0}".format(time_delta.seconds))
+            lcd.write_screen(msg, 10)
     msg = []
     msg.append("Temperatures")
     msg.append("Outside: {0}".format(temp_out))
