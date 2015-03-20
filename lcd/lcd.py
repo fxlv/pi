@@ -11,6 +11,7 @@
 
 import RPi.GPIO as GPIO
 import time
+import sys
 
 DEBUG = True
 
@@ -60,6 +61,7 @@ def main():
         clear_screen()
         print "Exiting..."
 
+
 def write_screen(msg, display_time=5):
     lcd_init()
     backlight()
@@ -97,6 +99,7 @@ def write_screen(msg, display_time=5):
                 display_line = line
             lcd_write_line(display_line, msg.index(line)+1)
         time.sleep(display_time)
+
 
 def run_test():
     lcd_init()

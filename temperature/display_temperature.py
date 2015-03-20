@@ -11,10 +11,12 @@ import datetime
 
 t = tempdb.Tempdb()
 
+
 def print_sources():
     print "Available sources:"
     for source in t.get_source_names():
-        print " > ",source
+        print " > ", source
+
 
 def show_last_reading():
     for source in t.get_source_names():
