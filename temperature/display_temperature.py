@@ -18,12 +18,30 @@ def print_sources():
         print " > ", source
 
 
+def trend(source_name):
+    temperatures = {}
+    temperatures_list = []
+    index = 0
+    for reading in t.get_all_readings(source_name, 5):
+        index += 1
+        temperatures[index] = reading['temperature']
+        temperatures_list.append(reading['temperature'])
+    if min(temperatures_list) == max(temperatures_list):
+        return "Steady"
+    if temperatures[1] < temperatures[5]:
+        return "Rising"
+    if temperatures[1] > temperatures[5]:
+        return "Falling"
+    return "Unknown"
+
+
 def show_last_reading():
     for source in t.get_source_names():
         reading_count = t.get_reading_count(source)
         last_reading = t.get_last_reading(source)
         if source == "ilmerree_temperature":
             temp_out = last_reading['temperature']
+            trend_out = trend(source)
         if source == "wipi-int":
             temp_in = last_reading['temperature']
         if source == "wipi-int-humidity":
@@ -43,8 +61,8 @@ def show_last_reading():
         lcd.write_screen(msg, 5)
     msg = []
     msg.append("Temperatures")
-    msg.append("Outside: {0}".format(temp_out))
-    msg.append("Inside: {0}".format(temp_in))
+    msg.append("Out: {0} [{1}]".format(temp_out, trend_out))
+    msg.append("In: {0}".format(temp_in))
     msg.append("Humidity: {0}".format(humidity_in))
     lcd.write_screen(msg, 20)
 
