@@ -37,5 +37,5 @@ t = tempdb.Tempdb()
 t.add_reading("forecastio_temperature", forecastio_temperature)
 t.add_reading("ilmerree_temperature", ilmerree_temperature)
 
-tempy.update({"sensor_name":"ilmerree_temperature", "temperature":ilmerree_temperature})
-tempy.update({"sensor_name":"forecastio_temperature","temperature":forecastio_temperature})
+tempy.update({"source":"wipi","sensor":"ilmerree_temperature", "temperature":ilmerree_temperature})
+tempy.update({"source":"wipi","sensor":"forecastio_temperature","temperature":forecastio_temperature})
