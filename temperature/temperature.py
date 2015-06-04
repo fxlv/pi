@@ -8,6 +8,7 @@
 import glob
 import sys
 import os
+import tempy
 import subprocess
 from azurepy import queues
 from storage import tempdb
@@ -103,6 +104,7 @@ def main():
     t = tempdb.Tempdb()
     t.add_reading("wipi-int", temperature_dht22)
     t.add_reading("wipi-int-humidity", humidity_dht22)
+    tempy.update({"sensor_name":"wipi-int", "temperature":temperature_dht22})
 
 if __name__ == '__main__':
     main()

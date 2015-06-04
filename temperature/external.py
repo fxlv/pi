@@ -8,6 +8,7 @@ import account
 import ilmerree
 from storage import tempdb
 import time
+import tempy
 
 # Tallinn, Kesklinn
 lat, lng = 59.41494, 24.74032
@@ -35,3 +36,6 @@ ilmerree_temperature = ilmerree.get_temperature()
 t = tempdb.Tempdb()
 t.add_reading("forecastio_temperature", forecastio_temperature)
 t.add_reading("ilmerree_temperature", ilmerree_temperature)
+
+tempy.update({"sensor_name":"ilmerree_temperature", "temperature":ilmerree_temperature})
+tempy.update({"sensor_name":"forecastio_temperature","temperature":forecastio_temperature})
