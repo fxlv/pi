@@ -101,10 +101,7 @@ def main():
         infofile.write("temperature_dht22={}\n".format(temperature_dht22))
         infofile.write("temperature_dallas={}\n".format(temperature_dallas))
 
-    t = tempdb.Tempdb()
-    t.add_reading("wipi-int", temperature_dht22)
-    t.add_reading("wipi-int-humidity", humidity_dht22)
-    tempy.update({"source":"wipi","sensor":"wipi-int", "temperature":temperature_dht22})
+    tempy.update({"source":"wipi","sensor":"wipi-int", "temperature":temperature_dht22, "humidity":humidity_dht22})
 
 if __name__ == '__main__':
     main()
