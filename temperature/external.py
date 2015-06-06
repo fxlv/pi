@@ -31,11 +31,20 @@ while True:
 current_data = forecast.currently()
 forecastio_temperature = current_data.d['temperature']
 
-ilmerree_temperature = ilmerree.get_temperature()
+ilm = ilmerree.Ilm()
+ilmerree_temperature = ilm.get_temperature()
+ilmerree_wind_speed = ilm.get_wind()['wind_speed']
+ilmerree_wind_direction = ilm.get_wind()['wind_direction']
 
 t = tempdb.Tempdb()
 t.add_reading("forecastio_temperature", forecastio_temperature)
 t.add_reading("ilmerree_temperature", ilmerree_temperature)
 
-tempy.update({"source":"wipi","sensor":"ilmerree_temperature", "temperature":ilmerree_temperature})
+tempy.update({
+    "source":"wipi",
+    "sensor":"ilmerree_temperature", 
+    "temperature":ilmerree_temperature,
+    "wind_speed": ilmerree_wind_speed,
+    "wind_direction": ilmerree_wind_direction
+    })
 tempy.update({"source":"wipi","sensor":"forecastio_temperature","temperature":forecastio_temperature})
