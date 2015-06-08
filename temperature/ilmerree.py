@@ -21,7 +21,10 @@ class Ilm:
     # try to translate estonian strings to english
     # (used to translate weather direction)
     def translate(self, string):
-        known_strings = {u'l\xf5unast': 'southern'}
+        known_strings = {
+                u'l\xf5unast': 'southern', 
+                u'l\xe4\xe4nest':'westerly'
+        }
         if string in known_strings:
             return known_strings[string]
         else:
