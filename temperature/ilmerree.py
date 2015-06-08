@@ -23,7 +23,8 @@ class Ilm:
     def translate(self, string):
         known_strings = {
                 u'l\xf5unast': 'southern', 
-                u'l\xe4\xe4nest':'westerly'
+                u'l\xe4\xe4nest':'westerly',
+                'edelast':'southwest',
         }
         if string in known_strings:
             return known_strings[string]
