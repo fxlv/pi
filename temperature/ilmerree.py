@@ -24,6 +24,7 @@ class Ilm:
         known_strings = {
                 u'l\xf5unast': 'southern', 
                 u'l\xe4\xe4nest':'westerly',
+                u'p\xf5hjast':'north',
                 'edelast':'southwest',
         }
         if string in known_strings:
