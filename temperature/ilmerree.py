@@ -38,7 +38,8 @@ class Ilm:
             (wind_direction, wind_speed) = result.split()[:2]
             wind_direction = self.translate(wind_direction)
             wind_speed = float(wind_speed)
-        except AttributeError:
-            return False
+        except AttributeError, e:
+            print "Got error", e
+            return {"wind_direction": "error", "wind_speed": "error" }
         return {"wind_direction": wind_direction, "wind_speed":wind_speed }
 
