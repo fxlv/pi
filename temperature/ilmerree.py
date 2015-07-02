@@ -26,6 +26,7 @@ class Ilm:
                 u'l\xe4\xe4nest':'westerly',
                 u'p\xf5hjast':'north',
                 'edelast':'southwest',
+                'loodest':'northwest',
         }
         if string in known_strings:
             return known_strings[string]
