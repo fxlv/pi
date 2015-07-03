@@ -27,4 +27,8 @@ def get_humidity(sensor_name):
 
 def update(data):
     url = "{}/add".format(tempy_url)
-    requests.post(url, data=data)
+    try:
+        requests.post(url, data=data)
+    except:
+        return False
+    return True
