@@ -101,7 +101,10 @@ def main():
         infofile.write("temperature_dht22={}\n".format(temperature_dht22))
         infofile.write("temperature_dallas={}\n".format(temperature_dallas))
 
-    tempy.update({"source":"wipi","sensor":"wipi-int", "temperature":temperature_dht22, "humidity":humidity_dht22})
+    if tempy.update({"source":"wipi","sensor":"wipi-int", "temperature":temperature_dht22, "humidity":humidity_dht22}):
+        print "Update was a success"
+    else:
+        print "Update failed"
 
 if __name__ == '__main__':
     main()
