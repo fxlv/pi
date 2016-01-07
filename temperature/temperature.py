@@ -111,9 +111,9 @@ def main():
         debugprint(temperature_dht22)
 
     temperature_data = {}
-    temperature_data["humidity_dht22"] = humidity_dht22
-    temperature_data["temperature_dht22"] = temperature_dht22 
-    temperature_data["temperature_dallas"] = temperature_dallas
+    temperature_data["humidity_dht22"] = float(humidity_dht22)
+    temperature_data["temperature_dht22"] = float(temperature_dht22)
+    temperature_data["temperature_dallas"] = float(temperature_dallas)
 
     if OUTPUT_INFOFILE:
         write_infofile(temperature_data)
