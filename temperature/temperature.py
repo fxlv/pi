@@ -10,12 +10,16 @@ import sys
 import os
 import tempy
 import subprocess
+import json
 from azurepy import queues
 from storage import tempdb
 infofile_name = "/tmp/temperature.info"
+jsonfile_name = "/tmp/temperature.json"
 home = os.environ['HOME']
 
 DEBUG = True
+OUTPUT_JSON = True
+OUTPUT_INFOFILE = True
 
 
 def debugprint(msg):
@@ -36,6 +40,16 @@ def find_adafruit_dht():
                 return path
     else:
         return False
+
+def write_infofile(temperature_data):
+    with open(infofile_name, "w") as infofile:
+        infofile.write("humidity_dht22={}\n".format(temperature_data["humidity_dht22"]))
+        infofile.write("temperature_dht22={}\n".format(temperature_data["temperature_dht22"]))
+        infofile.write("temperature_dallas={}\n".format(temperature_data["temperature_dallas"]))
+
+def write_json(temperature_data):
+    with open(jsonfile_name, "w") as jsonfile:
+        jsonfile.write(json.dumps(temperature_data))
 
 
 def main():
@@ -96,15 +110,21 @@ def main():
         debugprint(humidity_dht22)
         debugprint(temperature_dht22)
 
-    with open(infofile_name, "w") as infofile:
-        infofile.write("humidity_dht22={}\n".format(humidity_dht22))
-        infofile.write("temperature_dht22={}\n".format(temperature_dht22))
-        infofile.write("temperature_dallas={}\n".format(temperature_dallas))
+    temperature_data = {}
+    temperature_data["humidity_dht22"] = humidity_dht22
+    temperature_data["temperature_dht22"] = temperature_dht22 
+    temperature_data["temperature_dallas"] = temperature_dallas
+
+    if OUTPUT_INFOFILE:
+        write_infofile(temperature_data)
+    if OUTPUT_JSON:
+        write_json(temperature_data)
 
     if tempy.update({"source":"wipi","sensor":"wipi-int", "temperature":temperature_dht22, "humidity":humidity_dht22}):
         print "Update was a success"
     else:
         print "Update failed"
+
 
 if __name__ == '__main__':
     main()
