@@ -41,11 +41,16 @@ def find_adafruit_dht():
     else:
         return False
 
+
 def write_infofile(temperature_data):
     with open(infofile_name, "w") as infofile:
-        infofile.write("humidity_dht22={}\n".format(temperature_data["humidity_dht22"]))
-        infofile.write("temperature_dht22={}\n".format(temperature_data["temperature_dht22"]))
-        infofile.write("temperature_dallas={}\n".format(temperature_data["temperature_dallas"]))
+        infofile.write("humidity_dht22={}\n".format(temperature_data[
+            "humidity_dht22"]))
+        infofile.write("temperature_dht22={}\n".format(temperature_data[
+            "temperature_dht22"]))
+        infofile.write("temperature_dallas={}\n".format(temperature_data[
+            "temperature_dallas"]))
+
 
 def write_json(temperature_data):
     with open(jsonfile_name, "w") as jsonfile:
@@ -120,7 +125,10 @@ def main():
     if OUTPUT_JSON:
         write_json(temperature_data)
 
-    if tempy.update({"source":"wipi","sensor":"wipi-int", "temperature":temperature_dht22, "humidity":humidity_dht22}):
+    if tempy.update({"source": "wipi",
+                     "sensor": "wipi-int",
+                     "temperature": temperature_dht22,
+                     "humidity": humidity_dht22}):
         print "Update was a success"
     else:
         print "Update failed"
