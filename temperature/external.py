@@ -6,14 +6,17 @@
 import forecastio
 import account
 import ilmerree
-from storage import tempdb
+#from storage import tempdb
 import time
-import tempy
+#import tempy
+import json
 
 # Tallinn, Kesklinn
 lat, lng = 59.41494, 24.74032
 # my forecast.io key, kept in a separate file
 key = account.forecast_io_key
+
+jsonfile_name = "/tmp/tallinn_temperature.json"
 
 
 while True:
@@ -36,15 +39,22 @@ ilmerree_temperature = ilm.get_temperature()
 ilmerree_wind_speed = ilm.get_wind()['wind_speed']
 ilmerree_wind_direction = ilm.get_wind()['wind_direction']
 
-t = tempdb.Tempdb()
-t.add_reading("forecastio_temperature", forecastio_temperature)
-t.add_reading("ilmerree_temperature", ilmerree_temperature)
+#t = tempdb.Tempdb()
+#t.add_reading("forecastio_temperature", forecastio_temperature)
+#t.add_reading("ilmerree_temperature", ilmerree_temperature)
+temperature_data = {}
+temperature_data["ilmerree"] = float(ilmerree_temperature)
+temperature_data["forecastio"] = float(forecastio_temperature)
 
-tempy.update({
-    "source":"wipi",
-    "sensor":"ilmerree_temperature", 
-    "temperature":ilmerree_temperature,
-    "wind_speed": ilmerree_wind_speed,
-    "wind_direction": ilmerree_wind_direction
-    })
-tempy.update({"source":"wipi","sensor":"forecastio_temperature","temperature":forecastio_temperature})
+with open(jsonfile_name, "w") as jsonfile:
+    jsonfile.write(json.dumps(temperature_data))
+
+
+#tempy.update({
+#    "source":"wipi",
+#    "sensor":"ilmerree_temperature", 
+#    "temperature":ilmerree_temperature,
+#    "wind_speed": ilmerree_wind_speed,
+#    "wind_direction": ilmerree_wind_direction
+#    })
+#tempy.update({"source":"wipi","sensor":"forecastio_temperature","temperature":forecastio_temperature})
