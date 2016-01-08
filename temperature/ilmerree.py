@@ -12,8 +12,22 @@ class Ilm:
 
     def get_temperature(self):
         try:
-            temperature = self.soup.find("div", "ilm_tana_parem").string.strip()
-            temperature = float(temperature.split()[0])
+            #temperature = self.soup.find("option", "ilm_tana_parem").string.strip()
+            # TODO: There mus be a better way to do this, 
+            # but for now this will have to do
+            temperature = self.soup.findAll("option")
+            # we now have all the options and need to find Tallinn amongst them
+            for t in temperature:
+                if "Tallinn" in str(t):
+                    # if Tallinn was found, 
+                    # convert to string and split by whitespaces
+                    tallinn_weather = str(t).split()
+                    # now search for temperature
+                    # example: 'data-item-airtemperature="-18.8"'
+                    for item in tallinn_weather:
+                        if "airtemperature" in item:
+                            # we found the temperature, now extract it as a float
+                            temperature = float(item.split("=")[1].replace('"',''))
         except AttributeError:
             return False
         return temperature
