@@ -10,44 +10,50 @@ import ilmerree
 import time
 #import tempy
 import json
+import sys
 
 # Tallinn, Kesklinn
-lat, lng = 59.41494, 24.74032
+tallinn = {"lat": 59.41494, "lng": 24.74032}
+# Riga, Latvia
+riga = {"lat": 56.9460, "lng": 24.1149}
 # my forecast.io key, kept in a separate file
 key = account.forecast_io_key
 
-jsonfile_name = "/tmp/tallinn_temperature.json"
+jsonfile_name = "/tmp/external_temperature.json"
 
-
+places = {"tallinn": tallinn, "riga": riga}
 while True:
     retry_count = 0
     try:
         if retry_count > 0:
             sleep_time = (retry_count * 2) + 5
             time.sleep(sleep_time)
-        forecast = forecastio.load_forecast(key, lat, lng)
+        for place in places:
+            forecast = forecastio.load_forecast(key, places[place]["lat"], places[place]["lng"])
+            current_data = forecast.currently()
+            forecastio_temperature = current_data.d['temperature']
+            places[place]["temperature_forecastio"] = float(forecastio_temperature)
         break
-    except:
+    except Exception, e:
         print "Failed to get data from forecast.io, will retry"
+        print "Exception: ",e
+        if retry_count == 10:
+            print "Max retry cunt reached, giving up."
+            sys.exit(1)
         retry_count += 1
 
-current_data = forecast.currently()
-forecastio_temperature = current_data.d['temperature']
 
 ilm = ilmerree.Ilm()
-ilmerree_temperature = ilm.get_temperature()
+places["tallinn"]["temperature_ilmerree"] = float(ilm.get_temperature())
 ilmerree_wind_speed = ilm.get_wind()['wind_speed']
 ilmerree_wind_direction = ilm.get_wind()['wind_direction']
 
 #t = tempdb.Tempdb()
 #t.add_reading("forecastio_temperature", forecastio_temperature)
 #t.add_reading("ilmerree_temperature", ilmerree_temperature)
-temperature_data = {}
-temperature_data["ilmerree"] = float(ilmerree_temperature)
-temperature_data["forecastio"] = float(forecastio_temperature)
 
 with open(jsonfile_name, "w") as jsonfile:
-    jsonfile.write(json.dumps(temperature_data))
+    jsonfile.write(json.dumps(places))
 
 
 #tempy.update({
