@@ -11,6 +11,7 @@ import os
 import tempy
 import subprocess
 import json
+import time
 from azurepy import queues
 from storage import tempdb
 infofile_name = "/tmp/temperature.info"
@@ -21,6 +22,10 @@ DEBUG = True
 OUTPUT_JSON = True
 OUTPUT_INFOFILE = True
 
+# sensors sometimes can return very high values
+# define maximum values here
+MAX_TEMP = 100 
+MAX_HUMIDITY = 100 
 
 def debugprint(msg):
     global DEBUG
@@ -92,7 +97,8 @@ def main():
     # getting dht info can fail so we use simple retry mechanism
     dht_success = False
 
-    # DHT can fail to return temperature, so retry if need be
+    # DHT can fail to return temperature or return some fynny values
+    # so retry untill dht_success is True
     while not dht_success:
         adafruit_dht = find_adafruit_dht()
         if not adafruit_dht:
@@ -105,9 +111,16 @@ def main():
             debugprint("OK, got information from DHT22")
             temp_and_humidity = output[2].split()
             debugprint(temp_and_humidity)
-            temperature_dht22 = temp_and_humidity[2]
-            humidity_dht22 = temp_and_humidity[6]
-            dht_success = True
+            temperature_dht22 = float(temp_and_humidity[2])
+            humidity_dht22 = float(temp_and_humidity[6])
+            if temperature_dht22 < MAX_TEMP and humidity_dht22 < MAX_HUMIDITY:
+                dht_success = True
+            else:
+                # some funny values were returned by the sensors, 
+                # wait and retry
+                if DEBUG:
+                    print "Unreasonable values returned by the sensors"
+                time.sleep(1)
         else:
             debugprint("Failed to get information from DHT22")
 
