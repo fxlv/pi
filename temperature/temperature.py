@@ -22,8 +22,11 @@ OUTPUT_INFOFILE = True
 
 # sensors sometimes can return very high values
 # define maximum values here
-MAX_TEMP = 100 
-MAX_HUMIDITY = 100 
+MAX_TEMP = 100
+MAX_HUMIDITY = 100
+MIN_TEMP = -10
+MIN_HUMIDITY = 0
+
 
 def debugprint(msg):
     global DEBUG
@@ -111,10 +114,13 @@ def main():
             debugprint(temp_and_humidity)
             temperature_dht22 = float(temp_and_humidity[2])
             humidity_dht22 = float(temp_and_humidity[6])
-            if temperature_dht22 < MAX_TEMP and humidity_dht22 < MAX_HUMIDITY:
+            if (temperature_dht22 < MAX_TEMP and
+                    humidity_dht22 < MAX_HUMIDITY and
+                    temperature_dht22 > MIN_TEMP and
+                    humidity_dht22 > MIN_HUMIDITY):
                 dht_success = True
             else:
-                # some funny values were returned by the sensors, 
+                # some funny values were returned by the sensors,
                 # wait and retry
                 if DEBUG:
                     print "Unreasonable values returned by the sensors"
