@@ -12,8 +12,6 @@ import tempy
 import subprocess
 import json
 import time
-from azurepy import queues
-from storage import tempdb
 infofile_name = "/tmp/temperature.info"
 jsonfile_name = "/tmp/temperature.json"
 home = os.environ['HOME']
